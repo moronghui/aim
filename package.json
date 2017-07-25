@@ -1,0 +1,31 @@
+{
+  "name": "aim",
+  "version": "1.0.0",
+  "description": "mis",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moronghui/aim.git"
+  },
+  "keywords": [
+    "aim"
+  ],
+  "author": "moronghui",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/moronghui/aim/issues"
+  },
+  "homepage": "https://github.com/moronghui/aim#readme",
+  "devDependencies": {
+    "body-parser": "^1.17.2",
+    "crypto": "^0.0.3",
+    "express": "^4.15.3",
+    "mongodb": "^2.2.30",
+    "nextday": "^1.0.1",
+    "request": "^2.81.0",
+    "silly-datetime": "^0.1.2"
+  }
+}

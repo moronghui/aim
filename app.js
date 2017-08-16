@@ -103,7 +103,7 @@ app.post('/api/list/getListTotal',function(req,res){
   	console.log('Example app listening at http://%s:%s', host, port);
 });*/
 
-http.createServer(app).listen(80,() => console.log('HTTP Web Server Start Port :80'));
+//http.createServer(app).listen(80,() => console.log('HTTP Web Server Start Port :80'));
 https.createServer(options,app).listen(443,function(){
 	console.log('HTTPS Web Server Start Port :443')
 });

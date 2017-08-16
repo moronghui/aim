@@ -1,9 +1,17 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+var https = require('https');
+var http = require('http');
+var fs = require('fs');
 var common = require('./api/common');
 var util = require('./api/util/util.js');/*工具函数文件*/
 var sign = require('./api/sign/sign.js');/*签到*/
 var list = require('./api/list/list.js');/*待办事项清单*/
+
+var options = {
+	key:fs.readFileSync('./cert/2_www.moronghui.cn.key'),
+	cert:fs.readFileSync('./cert/1_www.moronghui.cn_bundle.crt')
+}
 
 var app = express();
 app.use(bodyParser.json()); // for parsing application/json
@@ -89,8 +97,13 @@ app.post('/api/list/getListTotal',function(req,res){
 	list.getListTotal(token,res);
 })
 
-var server = app.listen(443, function () {
+/*var server = app.listen(443, function () {
   	var host = server.address().address;
   	var port = server.address().port;
   	console.log('Example app listening at http://%s:%s', host, port);
+});*/
+
+http.createServer(app).listen(80,() => console.log('HTTP Web Server Start Port :80'));
+https.createServer(options,app).listen(443,function(){
+	console.log('HTTPS Web Server Start Port :443')
 });

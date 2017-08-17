@@ -12,16 +12,22 @@ exports.getMonthRecord=getMonthRecord
 
 /**
  * 选择该月的签到记录
- * @param  {[type]} month //7
+ * @param  {[type]} month //2017-07
  * @param  {[type]} arr   [description]
  * @return {[type]}       [description]
  */
 function getMonthRecord(month,arr){
+	if(!(/-/.test(month))){
+		return []; 
+	}
 	var rs = [];
+	var y = month.split('-')[0];
+	var m = month.split('-')[1]; 
 	for (var i = 0; i < arr.length; i++) {
 		var strArr = arr[i].date.split('-');
-		var str = parseInt(strArr[1]);//7
-		if (str == month) {
+		var str_y = parseInt(strArr[0]);//2017
+		var str_m = parseInt(strArr[1]);//07
+		if (str_y == y && str_m == m) {
 			rs.push(parseInt(strArr[2]));
 		}
 	}

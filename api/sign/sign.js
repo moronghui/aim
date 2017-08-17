@@ -172,8 +172,8 @@ function updateSign(openid,callback){
 			var total = parseInt(obj.total)+1;
 			var nextday = util.getNextday(obj.last);
 			var date = util.getDate();
-			console.log('nextday:'+nextday);
-			console.log('date:'+date);
+			//console.log('nextday:'+nextday);
+			//console.log('date:'+date);
 			var cont = parseInt(obj.cont);
 			var big_cont = parseInt(obj.cont);
 			if (date == nextday) {/*连续签到*/

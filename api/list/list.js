@@ -232,7 +232,11 @@ function getList(token,res){
 				util.result('104','读取数据出错',null,res);
 				return;
 			}
-			util.result('200','获取数据成功',result[0].list,res);
+			let data = []
+			if (result.length != 0) {
+				data = result[0].list
+			}
+			util.result('200','获取数据成功',data,res);
 		},sort=null)
 	})
 }

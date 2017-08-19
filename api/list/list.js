@@ -8,55 +8,6 @@ exports.doneList = doneList;
 exports.deleteOneList = deleteOneList;
 exports.getListTotal=getListTotal
 exports.getListRecord=getListRecord
-exports.deleteList=deleteList
-
-
-function deleteList(token,id,res){
-	common.getOpenid(token,function(openid){
-		if (openid == '') {
-			util.result('104','读取数据出错',null,res);
-			return;
-		}
-		var date = util.getDate();//2017-07-24
-
-		db.find('list',{
-			'openid':openid,
-			'date':date
-		},function(err,result){
-			if (err) {
-				util.result('104','读取数据出错',null,res);
-				return;
-			}
-			if (result.length == 0) {
-				util.result('205','待办事项为空',null,res);
-			}else{
-				var list = result[0].list;
-				if (list.length == 0) {
-					util.result('205','待办事项为空',null,res);
-					return ; 
-				}
-				for (var i = 0; i < list.length; i++) {
-					if (list[i].id == id) {
-						list.splice(i,1);
-					}
-				}
-				db.updateOne('list',{
-					'openid':openid,
-					'date':date
-				},{
-					'list':list
-				},function(err,result){
-					if (err) {
-						util.result('206','更新数据失败',null,res);
-						return ; 
-					}
-					util.result('200','删除成功',null,res);
-				})
-
-			}
-		},sort=null)
-	})
-}
 
 /**
  * 获取待办事项最近七天的统计数据

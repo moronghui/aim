@@ -84,12 +84,6 @@ app.post('/api/list/doneList',function(req,res){
 	list.doneList(token,id,res);
 })
 
-//删除一条待办事项
-app.post('/api/list/deleteList',function(req,res){
-	var token = req.body.token;
-	var id = req.body.id;
-	list.deleteList(token,id,res);
-})
 
 //删除一条待办事项
 app.post('/api/list/deleteOneList',function(req,res){

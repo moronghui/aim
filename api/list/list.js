@@ -7,6 +7,131 @@ exports.getList = getList;
 exports.doneList = doneList;
 exports.deleteOneList = deleteOneList;
 exports.getListTotal=getListTotal
+exports.getListRecord=getListRecord
+exports.deleteList=deleteList
+
+
+function deleteList(token,id,res){
+	common.getOpenid(token,function(openid){
+		if (openid == '') {
+			util.result('104','读取数据出错',null,res);
+			return;
+		}
+		var date = util.getDate();//2017-07-24
+
+		db.find('list',{
+			'openid':openid,
+			'date':date
+		},function(err,result){
+			if (err) {
+				util.result('104','读取数据出错',null,res);
+				return;
+			}
+			if (result.length == 0) {
+				util.result('205','待办事项为空',null,res);
+			}else{
+				var list = result[0].list;
+				if (list.length == 0) {
+					util.result('205','待办事项为空',null,res);
+					return ; 
+				}
+				for (var i = 0; i < list.length; i++) {
+					if (list[i].id == id) {
+						list.splice(i,1);
+					}
+				}
+				db.updateOne('list',{
+					'openid':openid,
+					'date':date
+				},{
+					'list':list
+				},function(err,result){
+					if (err) {
+						util.result('206','更新数据失败',null,res);
+						return ; 
+					}
+					util.result('200','删除成功',null,res);
+				})
+
+			}
+		},sort=null)
+	})
+}
+
+/**
+ * 获取待办事项最近七天的统计数据
+ * data{
+ *    categories: ['7-17','7-18', '7-19', '7-20', '7-21', '昨天', '今天'],
+ *    done: [10,15,12,8,11,10,13],
+ *    undo: [10,15,12,8,11,10,13]
+ * }
+ */
+function getListRecord(token,res){
+	common.getOpenid(token,function(openid){
+		if (openid == '') {
+			util.result('104','读取数据出错',null,res);
+			return;
+		}
+		var date = util.getDate();//2017-07-24
+		db.find('list',{
+			'openid':openid
+		},function(err,result){
+			if (err) {
+				util.result('104','读取数据出错',null,res);
+				return;
+			}
+			var categories = [];
+			var done = [];
+			var undo = [];
+
+			if (result.length <= 7) {//只有小于七天数据，全部读出来
+				for (let i = 0; i < result.length; i++) {
+					categories.push(result[i].date.slice(5));
+					let arr = getDayStatis(result,result[i].list);
+					done.push(arr[0]);
+					undo.push(arr[1]);
+				}
+			}else{
+				if (result[result.length-1].date != date) {//今天还没有数据
+					result = result.slice(-6);
+				}else{
+					result = result.slice(-7);
+				}
+				for (let i = 0; i < result.length; i++) {
+					categories.push(result[i].date.slice(5));
+					let arr = getDayStatis(result,result[i].list);
+					done.push(arr[0]);
+					undo.push(arr[1]);
+				}
+				if (result.length == 6) {
+					categories.push(date.slice(5));
+					done.push(0);
+					undo.push(0);
+				}
+			}
+			util.result('200','获取数据成功',{categories,done,undo},res);
+		},{date:1})
+	})
+
+}
+
+/**
+ * 根据日期统计当天清单完成情况
+ * @return {[type]} [description]
+ */
+function getDayStatis(result,list){
+	var undoTotal = 0;
+	var doneTotal = 0;
+	for (var j = 0; j < list.length; j++) {
+		if(list[j].done == '1') {
+			doneTotal++;
+		}
+		if(list[j].done == '0') {
+			undoTotal++;
+		}
+	}
+	return [doneTotal,undoTotal];
+}
 
 /**
  * 获取待办事项总体统计数据(已完成和未完成)

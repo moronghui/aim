@@ -85,6 +85,13 @@ app.post('/api/list/doneList',function(req,res){
 })
 
 //删除一条待办事项
+app.post('/api/list/deleteList',function(req,res){
+	var token = req.body.token;
+	var id = req.body.id;
+	list.deleteList(token,id,res);
+})
+
+//删除一条待办事项
 app.post('/api/list/deleteOneList',function(req,res){
 	var token = req.body.token;
 	var id = req.body.id;
@@ -97,13 +104,20 @@ app.post('/api/list/getListTotal',function(req,res){
 	list.getListTotal(token,res);
 })
 
+//获取待办事项最近七天的统计数据
+app.post('/api/list/getListRecord',function(req,res){
+	var token = req.body.token;
+	list.getListRecord(token,res);
+})
+
+
 /*var server = app.listen(443, function () {
   	var host = server.address().address;
   	var port = server.address().port;
   	console.log('Example app listening at http://%s:%s', host, port);
 });*/
 
-//http.createServer(app).listen(80,() => console.log('HTTP Web Server Start Port :80'));
-https.createServer(options,app).listen(443,function(){
+http.createServer(app).listen(80,() => console.log('HTTP Web Server Start Port :80'));
+/*https.createServer(options,app).listen(443,function(){
 	console.log('HTTPS Web Server Start Port :443')
-});
+});*/

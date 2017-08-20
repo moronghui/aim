@@ -7,6 +7,7 @@ var common = require('./api/common');
 var util = require('./api/util/util.js');/*工具函数文件*/
 var sign = require('./api/sign/sign.js');/*签到*/
 var list = require('./api/list/list.js');/*待办事项清单*/
+var news = require('./api/news/news.js');/*新闻*/
 
 var options = {
 	key:fs.readFileSync('./cert/2_www.moronghui.cn.key'),
@@ -22,6 +23,18 @@ app.get('/api/login', function (req, res) {
 	var code = req.query.code;
   	common.login(code,res);
 });
+
+//获取新闻列表概要
+app.get('/api/news/title',function(req,res){
+	var size = req.query.size;
+	news.getNewsTitle(size,res);
+})
+
+//获取新闻详情
+app.get('/api/news/detail',function(req,res){
+	var id = req.query.id;
+	news.getNewsDetail(id,res);
+})
 
 // 接受以api/开头的请求的中间件，判断每个请求api的token的合法性
 app.use('/api/',function (req, res, next) {
@@ -105,13 +118,14 @@ app.post('/api/list/getListRecord',function(req,res){
 })
 
 
+
 /*var server = app.listen(443, function () {
   	var host = server.address().address;
   	var port = server.address().port;
   	console.log('Example app listening at http://%s:%s', host, port);
 });*/
 
-//http.createServer(app).listen(80,() => console.log('HTTP Web Server Start Port :80'));
-https.createServer(options,app).listen(443,function(){
+http.createServer(app).listen(80,() => console.log('HTTP Web Server Start Port :80'));
+/*https.createServer(options,app).listen(443,function(){
 	console.log('HTTPS Web Server Start Port :443')
-});
+});*/

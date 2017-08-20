@@ -47,13 +47,13 @@ exports.insertOne = function(collection,json,callback){
  * @param  {[type]}   sort       [description]
  * @return {[type]}              [description]
  */
-exports.find = function(collection,json,callback,sort=null){
+exports.find = function(collection,json,callback,sort=null,limit=0){
 	_connectDB(function(err,db){
 		if (err) {
 			callback(err,null);
 			return;
 		}
-		var cursor = db.collection(collection).find(json).sort(sort);
+		var cursor = db.collection(collection).find(json).sort(sort).limit(parseInt(limit));
 		var result = [];
 		cursor.each(function(err,doc){
 			if (err) {
